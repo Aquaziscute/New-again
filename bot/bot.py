@@ -26,9 +26,9 @@ from .views import (
     AppealActionView,
     AppealModal,
     AssignmentClaimView,
+    AssignStaffView,
     ConfirmTimeView,
     ConfirmView,
-    EditMatchView,
     HelpView,
     ManageTeamView,
     RosterLookupView,
@@ -1413,36 +1413,31 @@ class LeagueCommands(commands.Cog):
     # -------------------------------------------------------------------------
 
     @app_commands.command(name="edit-match", description="Staff: assign caster and/or ref to a match")
-    @app_commands.describe(teams="Part of the team names to search for (e.g. 'Test')")
-    async def edit_match(self, interaction: discord.Interaction, teams: Optional[str] = None) -> None:
+    @app_commands.describe(match_id="The Match ID shown in the match channel")
+    async def edit_match(self, interaction: discord.Interaction, match_id: str) -> None:
         if not self.bot.is_staff(interaction):
             await self._send(interaction, "Staff only.")
             return
 
-        open_matches = list(self.bot.match_manager.open_matches())
-        if not open_matches:
-            await self._send(interaction, "No open matches right now.")
+        match = self.bot.match_manager._matches.get(match_id)
+        if not match:
+            await self._send(interaction, f"No match found with ID `{match_id}`.")
             return
 
-        if teams:
-            query = teams.lower()
-            filtered = [
-                m for m in open_matches
-                if query in m.team_one.lower() or query in m.team_two.lower()
-            ]
-        else:
-            filtered = open_matches
-
-        if not filtered:
-            await self._send(interaction, "No matches found matching that search.")
+        if match.status != "open":
+            await self._send(interaction, "That match is already completed or overdue.")
             return
 
-        view = EditMatchView(bot=self.bot, matches=filtered, guild=interaction.guild)
+        view = AssignStaffView(bot=self.bot, match=match, guild=interaction.guild)
         embed = discord.Embed(
-            title="Edit Match",
-            description="Select a match from the dropdown below.",
+            title=f"Assign Staff — {match.team_one} vs {match.team_two}",
+            description="Use the selector(s) below to assign caster and/or referee.",
             color=discord.Color.blurple(),
         )
+        embed.add_field(name="Week", value=str(match.week), inline=True)
+        embed.add_field(name="Type", value=match.match_type.capitalize(), inline=True)
+        if match.scheduled_time:
+            embed.add_field(name="Scheduled Time", value=match.scheduled_time, inline=False)
         await self._send(interaction, embed=embed, view=view)
 
     # -------------------------------------------------------------------------
