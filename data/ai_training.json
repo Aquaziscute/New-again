@@ -1,0 +1,164 @@
+[
+  {
+    "question": "test 123",
+    "answer": "Test 234",
+    "added_by": "3bf3",
+    "added_at": "2026-03-15T06:22:31.824632"
+  },
+  {
+    "question": "What are Ranked Scrims?",
+    "answer": "Ranked Scrims are competitive matches where players earn ranking points based on performance and participation. The more scrims you play and win, the higher your rank.",
+    "added_by": "3bf3",
+    "added_at": "2026-03-15T06:30:59.005169"
+  },
+  {
+    "question": "How do I rank up?",
+    "answer": "You earn rank by: Playing ranked scrims , winning matches, performing well (team contribution matters)  More scrims + better results = higher rank.",
+    "added_by": "3bf3",
+    "added_at": "2026-03-15T06:32:13.538447"
+  },
+  {
+    "question": "How Do I Join Ranked Matches?",
+    "answer": "Goto scrim queue channel, join queue then when the code fills up our PFA Bot will give you a private Code in your DMs",
+    "added_by": "3bf3",
+    "added_at": "2026-03-15T06:33:02.267150"
+  },
+  {
+    "question": "What Are the Rank Tiers?",
+    "answer": "Bronze, Silver, Gold, Platinum, Diamond, Master, GrandMaster!",
+    "added_by": "3bf3",
+    "added_at": "2026-03-15T06:34:00.636163"
+  },
+  {
+    "question": "Why Should I Play Ranked?",
+    "answer": "For many reasons! To track your improvement, earn leaderboard spots, and get noticed from other top tier teams!",
+    "added_by": "3bf3",
+    "added_at": "2026-03-15T06:34:43.191286"
+  },
+  {
+    "question": "What is the prize pool currently?",
+    "answer": "The prize pool should be announced in our server announcements! Take a look and see.",
+    "added_by": "3bf3",
+    "added_at": "2026-03-15T15:40:27.784764"
+  },
+  {
+    "question": "How do I become a staff?",
+    "answer": "We get this question a lot. Currently, our moderator applications are closed, but we'll open them again once we reach 2000 members, so invite your friends! For now, the only way to become a moderator is by being an active and positive member of the community. We're always on the lookout for standout members, and if we notice you, we'll send you a direct message to see if you're interested in joining the staff.",
+    "added_by": "3bf3",
+    "added_at": "2026-03-15T22:14:55.052810+00:00"
+  },
+  {
+    "question": "How do I apply for my team?",
+    "answer": "When team applications are open, you can find the Team Application form in the \u2060applications channel. Just fill out the form on the provided website, and we'll let you know if your team has been officially accepted for the upcoming season.",
+    "added_by": "3bf3",
+    "added_at": "2026-03-15T22:15:36.031768+00:00"
+  },
+  {
+    "question": "Which headsets are allowed?",
+    "answer": "To find the list of approved headsets, go to the \u2060rules channel and open the PFA League Regulations document. Scroll down to section 0.8, where you'll find a list of all allowed headsets. Any headset not on this list is banned from competitive play and could result in a temporary ban from the league.",
+    "added_by": "3bf3",
+    "added_at": "2026-03-15T22:15:52.496631+00:00"
+  },
+  {
+    "question": "How can I see the bracket?",
+    "answer": "You can access our bracket in #season-bracket.",
+    "added_by": "3bf3",
+    "added_at": "2026-03-21T16:39:58.599154+00:00"
+  },
+  {
+    "question": "What happens if I leave a match early?",
+    "answer": "Leaving early may result in penalties such as losing rank points or temporary restrictions from queueing.",
+    "added_by": "3bf3",
+    "added_at": "2026-03-21T17:28:46.706096+00:00"
+  },
+  {
+    "question": "Can I play with my friends?",
+    "answer": "Yes, depending on the queue type. Some queues allow teams, while others are solo-only for balanced matchmaking.",
+    "added_by": "3bf3",
+    "added_at": "2026-03-21T17:29:03.527898+00:00"
+  },
+  {
+    "question": "How are teams balanced?",
+    "answer": "Teams are balanced based on player rank and performance to keep matches fair and competitive.",
+    "added_by": "3bf3",
+    "added_at": "2026-03-21T17:29:09.958110+00:00"
+  },
+  {
+    "question": "What counts as \u201cgood performance\u201d?",
+    "answer": "Performance is based on teamwork, impact in matches, consistency, and overall contribution, not just wins.",
+    "added_by": "3bf3",
+    "added_at": "2026-03-21T17:29:24.849231+00:00"
+  },
+  {
+    "question": "Are there penalties for toxicity?",
+    "answer": "Yes, toxic behavior can lead to warnings, rank penalties, mutes, or bans depending on severity.",
+    "added_by": "3bf3",
+    "added_at": "2026-03-21T17:29:33.435401+00:00"
+  },
+  {
+    "question": "Can I report a player?",
+    "answer": "Yes, use the report system or contact staff with proof (clips, screenshots, etc.).",
+    "added_by": "3bf3",
+    "added_at": "2026-03-21T17:29:44.127642+00:00"
+  },
+  {
+    "question": "How often are ranks updated?",
+    "answer": "Ranks are typically updated after each match or periodically depending on the system.",
+    "added_by": "3bf3",
+    "added_at": "2026-03-21T17:29:55.026033+00:00"
+  },
+  {
+    "question": "Do ranks reset?",
+    "answer": "Ranks may reset at the start of a new season to keep competition fresh.",
+    "added_by": "3bf3",
+    "added_at": "2026-03-21T17:30:05.758316+00:00"
+  },
+  {
+    "question": "What is a season?",
+    "answer": "A season is a set period of time where players compete before ranks reset and rewards are given.",
+    "added_by": "3bf3",
+    "added_at": "2026-03-21T17:30:20.297425+00:00"
+  },
+  {
+    "question": "Are there rewards for ranking up?",
+    "answer": "Yes, rewards may include roles, recognition, or prizes depending on your final rank.",
+    "added_by": "3bf3",
+    "added_at": "2026-03-21T17:30:38.046305+00:00"
+  },
+  {
+    "question": "Can I switch teams?",
+    "answer": "Team switching depends on league rules and may require approval or a transfer period.",
+    "added_by": "3bf3",
+    "added_at": "2026-03-21T17:30:49.825463+00:00"
+  },
+  {
+    "question": "What happens if I disconnect?",
+    "answer": "If you disconnect, you may be allowed to rejoin depending on timing. Repeated disconnects could result in penalties.",
+    "added_by": "3bf3",
+    "added_at": "2026-03-21T17:31:00.878652+00:00"
+  },
+  {
+    "question": "Is smurfing allowed?",
+    "answer": "No, using alternate accounts to gain an advantage is not allowed and can result in bans.",
+    "added_by": "3bf3",
+    "added_at": "2026-03-21T17:31:10.843478+00:00"
+  },
+  {
+    "question": "How do I improve faster?",
+    "answer": "Play consistently, communicate with teammates, review gameplay, and learn from higher-ranked players.",
+    "added_by": "3bf3",
+    "added_at": "2026-03-21T17:31:20.172160+00:00"
+  },
+  {
+    "question": "How do I sync?",
+    "answer": "To sync run /sync in any channel then follow the instructions the bot provides.",
+    "added_by": "3bf3",
+    "added_at": "2026-03-21T17:32:30.119338+00:00"
+  },
+  {
+    "question": "How to report a staff",
+    "answer": "If you would like to report a staff please select the **management ticket** option in <#1482619493388779561>",
+    "added_by": "3bf3",
+    "added_at": "2026-03-22T03:29:48.762283+00:00"
+  }
+]

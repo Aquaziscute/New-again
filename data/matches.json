@@ -1,0 +1,195 @@
+{
+  "matches": [
+    {
+      "id": "8461f7df-cc5a-49de-b43c-3269df4c88fc",
+      "team_one": "Test",
+      "team_two": "noasd",
+      "channel_id": 1484973047583735838,
+      "due_at": "2026-03-27T17:52:44.609928Z",
+      "week": 12,
+      "reminder_sent": false,
+      "status": "open",
+      "match_type": "seeding",
+      "scores": {},
+      "rounds": [],
+      "submissions": {},
+      "mismatch_attempts": 0,
+      "scheduled_time": "7:00 PM EST \u2014 03/24/26",
+      "scheduled_confirmed": true
+    },
+    {
+      "id": "9239badf-5c7d-4d05-b381-ebc61bde8a73",
+      "team_one": "Test",
+      "team_two": "noasd",
+      "channel_id": 1485105961935831262,
+      "due_at": "2026-03-29T02:40:54.181837Z",
+      "week": 12,
+      "reminder_sent": false,
+      "status": "completed",
+      "match_type": "bracket",
+      "scores": {
+        "Test": 4,
+        "noasd": 5
+      },
+      "rounds": [],
+      "submissions": {},
+      "mismatch_attempts": 0,
+      "scheduled_time": "9:00PM EST \u2014 03/23/26",
+      "scheduled_confirmed": true
+    },
+    {
+      "id": "42c14939-8987-441a-a780-8e8287a2cc66",
+      "team_one": "Test",
+      "team_two": "noasd",
+      "channel_id": 1485141919247110204,
+      "due_at": "2026-03-29T05:03:47.159034Z",
+      "week": 12,
+      "reminder_sent": false,
+      "status": "completed",
+      "match_type": "bracket",
+      "scores": {
+        "Test": 4,
+        "noasd": 5
+      },
+      "rounds": [],
+      "submissions": {},
+      "mismatch_attempts": 0,
+      "scheduled_time": "9:00PM EST \u2014 03/23/26",
+      "scheduled_confirmed": true
+    },
+    {
+      "id": "0c0b0dd3-2ef8-435f-9288-e71b14596da1",
+      "team_one": "Test",
+      "team_two": "noasd",
+      "channel_id": 1485142509637075026,
+      "due_at": "2026-03-28T05:06:07.896814Z",
+      "week": 12,
+      "reminder_sent": false,
+      "status": "completed",
+      "match_type": "seeding",
+      "scores": {
+        "Test": 4,
+        "noasd": 5
+      },
+      "rounds": [],
+      "submissions": {},
+      "mismatch_attempts": 0,
+      "scheduled_time": null,
+      "scheduled_confirmed": false
+    },
+    {
+      "id": "89248f77-c0b2-4f66-b154-441e339f5d5a",
+      "team_one": "Test",
+      "team_two": "noasd",
+      "channel_id": 1485142904778395861,
+      "due_at": "2026-03-29T05:07:42.072756Z",
+      "week": 12,
+      "reminder_sent": false,
+      "status": "completed",
+      "match_type": "bracket",
+      "scores": {
+        "Test": 4,
+        "noasd": 5
+      },
+      "rounds": [],
+      "submissions": {},
+      "mismatch_attempts": 0,
+      "scheduled_time": null,
+      "scheduled_confirmed": false
+    },
+    {
+      "id": "bb5e3812-2a01-4064-ad9b-a2636acc05f5",
+      "team_one": "Test",
+      "team_two": "noasd",
+      "channel_id": 1485143731056148573,
+      "due_at": "2026-03-29T05:10:59.119294Z",
+      "week": 12,
+      "reminder_sent": false,
+      "status": "completed",
+      "match_type": "bracket",
+      "scores": {
+        "Test": 4,
+        "noasd": 5
+      },
+      "rounds": [],
+      "submissions": {},
+      "mismatch_attempts": 0,
+      "scheduled_time": null,
+      "scheduled_confirmed": false
+    },
+    {
+      "id": "6c779262-9882-4483-82c3-ed66e9854524",
+      "team_one": "Test",
+      "team_two": "noasd",
+      "channel_id": 1485144194476675093,
+      "due_at": "2026-03-29T05:12:49.628659Z",
+      "week": 12,
+      "reminder_sent": false,
+      "status": "completed",
+      "match_type": "bracket",
+      "scores": {
+        "Test": 4,
+        "noasd": 5
+      },
+      "rounds": [],
+      "submissions": {},
+      "mismatch_attempts": 0,
+      "scheduled_time": null,
+      "scheduled_confirmed": false
+    },
+    {
+      "id": "64100d67-68ec-475e-b31f-60b8b90aa3e7",
+      "team_one": "Test",
+      "team_two": "noasd",
+      "channel_id": 1485145032989216879,
+      "due_at": "2026-03-29T05:16:09.530006Z",
+      "week": 12,
+      "reminder_sent": false,
+      "status": "completed",
+      "match_type": "bracket",
+      "scores": {
+        "Test": 4,
+        "noasd": 5
+      },
+      "rounds": [],
+      "submissions": {},
+      "mismatch_attempts": 0,
+      "scheduled_time": null,
+      "scheduled_confirmed": false
+    },
+    {
+      "id": "7ccf4bde-c06e-488b-b23c-67c57ccbf189",
+      "team_one": "Test",
+      "team_two": "noasd",
+      "channel_id": 1485338687846875327,
+      "due_at": "2026-03-28T18:05:39.391345Z",
+      "week": 1,
+      "reminder_sent": false,
+      "status": "open",
+      "match_type": "seeding",
+      "scores": {},
+      "rounds": [],
+      "submissions": {},
+      "mismatch_attempts": 0,
+      "scheduled_time": null,
+      "scheduled_confirmed": false
+    },
+    {
+      "id": "12bfdad4-3968-4786-b9f9-96bd7f996276",
+      "team_one": "Test",
+      "team_two": "hniudfs",
+      "channel_id": 1486517655589621850,
+      "due_at": "2026-04-01T00:10:27.184548Z",
+      "week": 13,
+      "reminder_sent": false,
+      "status": "open",
+      "match_type": "seeding",
+      "scores": {},
+      "rounds": [],
+      "submissions": {},
+      "mismatch_attempts": 0,
+      "scheduled_time": "9:00PM EST \u2014 03/26/26",
+      "scheduled_confirmed": true
+    }
+  ]
+}

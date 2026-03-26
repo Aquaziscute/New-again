@@ -1,0 +1,65 @@
+{
+  "records": {
+    "1040872619739717694": [
+      {
+        "action": "ban",
+        "reason": "Rule 0.1A \u2014 Racism [A] \u2014 Minor Racism - Brief and commonplace daily verbal, behavioral, or environmental indignities, whether intentional or unintentional, that communicate hostile, derogatory, or negative racial slights and insults toward people of color.\nOffense #1: Warning + Day mute",
+        "mod": "3bf3",
+        "duration": "permanent",
+        "timestamp": "2026-03-22T23:37:35.636562"
+      },
+      {
+        "action": "unban",
+        "reason": "No reason provided",
+        "mod": "3bf3",
+        "duration": null,
+        "timestamp": "2026-03-22T23:51:53.007712"
+      },
+      {
+        "action": "ban",
+        "reason": "Rule 1.3 \u2014 Advertising\nOffense #2: 2 Month Ban",
+        "mod": "3bf3",
+        "duration": "2 month(s)",
+        "timestamp": "2026-03-22T23:52:24.689573"
+      }
+    ],
+    "1036149506774929488": [
+      {
+        "action": "ban",
+        "reason": "Rule 0.1 \u2014 Racism\nOffense #3: Perm Ban",
+        "mod": "monkwehcasts",
+        "duration": "permanent",
+        "timestamp": "2026-03-22T23:57:03.849371"
+      },
+      {
+        "action": "unban",
+        "reason": "No reason provided",
+        "mod": "monkwehcasts",
+        "duration": null,
+        "timestamp": "2026-03-22T23:57:22.004018"
+      },
+      {
+        "action": "ban",
+        "reason": "Rule 0.1A \u2014 Racism [A] \u2014 Minor Racism - Brief and commonplace daily verbal, behavioral, or environmental indignities, whether intentional or unintentional, that communicate hostile, derogatory, or negative racial slights and insults toward people of color.\nOffense #3: Perm Ban",
+        "mod": "3bf3",
+        "duration": "permanent",
+        "timestamp": "2026-03-23T00:03:56.812808"
+      },
+      {
+        "action": "ban",
+        "reason": "Rule 0.1.B \u2013 Racism [B] \u2014 Medium Racism - When someone explicitly states a negative stereotype about a racial group to justify excluding them. For instance, \"We can't hire those people; they're never on time,\" used as a reason not to consider a candidate of a certain race, even if it's not a company-wide rule. (Perm Ban)",
+        "mod": "3bf3",
+        "duration": "permanent",
+        "timestamp": "2026-03-26T00:05:57.024766"
+      },
+      {
+        "action": "unban",
+        "reason": "No reason provided",
+        "mod": "3bf3",
+        "duration": null,
+        "timestamp": "2026-03-26T00:07:37.436739"
+      }
+    ]
+  },
+  "appeals": {}
+}

@@ -1,0 +1,41 @@
+{
+  "teams": [
+    {
+      "name": "Test",
+      "hex_color": "#ff9900",
+      "role_id": 1484969720623923340,
+      "captain_id": 1014974788575432886,
+      "icon_url": null,
+      "co_captains": [],
+      "members": [
+        1014974788575432886
+      ],
+      "invites": []
+    },
+    {
+      "name": "noasd",
+      "hex_color": "#ff7200",
+      "role_id": 1484969830359633992,
+      "captain_id": 1040872619739717694,
+      "icon_url": null,
+      "co_captains": [],
+      "members": [
+        1040872619739717694
+      ],
+      "invites": []
+    },
+    {
+      "name": "hniudfs",
+      "hex_color": "#ff8930",
+      "role_id": 1486517567526015066,
+      "captain_id": 1036149506774929488,
+      "icon_url": null,
+      "co_captains": [],
+      "members": [
+        1036149506774929488
+      ],
+      "invites": []
+    }
+  ],
+  "roster_locked": false
+}
