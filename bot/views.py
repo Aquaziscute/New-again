@@ -422,15 +422,11 @@ class InviteDecisionView(discord.ui.View):
         team = self._get_team()
         if not team: await self._finalise(interaction, "That team no longer exists."); return
 
-        # Re-fetch the guild from the bot so the role cache is always fresh.
-        # interaction.guild is None when the user clicks from a DM, so we
-        # fall back to the stored guild id instead.
         guild = self.bot.get_guild(self.guild.id)
         if not guild:
             await self._finalise(interaction, "Could not reach the server. Please try again.")
             return
 
-        # Re-resolve the member against the fresh guild object
         member = guild.get_member(interaction.user.id)
         if not member:
             try:
@@ -448,7 +444,6 @@ class InviteDecisionView(discord.ui.View):
 
         notes: List[str] = []
 
-        # Resolve roles from the fresh guild object so get_role never returns None
         team_role   = guild.get_role(team.role_id)
         member_role = guild.get_role(self.member_role_id) if self.member_role_id else None
 
@@ -561,9 +556,7 @@ class ManageTeamView(discord.ui.View):
 
         user_id = interaction.user.id
         self.is_co_captain = user_id in team.co_captains
-        # Captain-only actions: disband and transfer captain
         self.is_captain_or_admin = is_admin or user_id == team.captain_id
-        # Roster actions: captain, co-captain, or admin
         self.can_manage_roster = is_admin or user_id == team.captain_id or self.is_co_captain
 
         self.member_select = MemberSelect(team=team, guild=self.guild, on_select=self._on_member_selected)
@@ -582,24 +575,20 @@ class ManageTeamView(discord.ui.View):
             self.force_add_button.callback = self._on_force_add  # type: ignore[assignment]
             self.add_item(self.force_add_button)
 
-        # Disband: captain and admin only
         self.disband_button = discord.ui.Button(label="Disband", style=discord.ButtonStyle.danger)
         self.disband_button.callback = self._on_disband  # type: ignore[assignment]
         self.disband_button.disabled = not self.is_captain_or_admin
         self.add_item(self.disband_button)
 
-        # Transfer Captain: captain and admin only
         self.transfer_button = discord.ui.Button(label="Transfer Captain", style=discord.ButtonStyle.blurple)
         self.transfer_button.callback = self._on_transfer  # type: ignore[assignment]
         self.transfer_button.disabled = not self.is_captain_or_admin
         self.add_item(self.transfer_button)
 
-        # Kick: captain, co-captain, and admin (enabled after selecting a member)
         self.kick_button = discord.ui.Button(label="Kick Member", style=discord.ButtonStyle.danger, disabled=True)
         self.kick_button.callback = self._on_kick  # type: ignore[assignment]
         self.add_item(self.kick_button)
 
-        # Promote: captain and admin only (co-captains cannot promote/demote)
         self.promote_button = discord.ui.Button(label="Promote to Co-Captain", style=discord.ButtonStyle.primary, disabled=True)
         self.promote_button.callback = self._on_promote  # type: ignore[assignment]
         self.add_item(self.promote_button)
@@ -609,9 +598,7 @@ class ManageTeamView(discord.ui.View):
     def _on_member_selected(self, member_id: int) -> None:
         self.selected_member = member_id
         is_captain = member_id == self.team.captain_id
-        # Kick: available to captain/co-captain/admin, but never the captain themselves (unless admin)
         self.kick_button.disabled = not self.can_manage_roster or (is_captain and not self.is_admin)
-        # Promote/demote: captain and admin only
         self.promote_button.disabled = not self.is_captain_or_admin or is_captain
         if not is_captain:
             self.promote_button.label = "Remove Co-Captain" if member_id in self.team.co_captains else "Promote to Co-Captain"
@@ -1038,6 +1025,7 @@ HELP_CATEGORIES = {
         "fields": [
             ("/admin-create-match",  "Admin: create a private match channel."),
             ("/submit-time",         "Propose and confirm your match time."),
+            ("/edit-match",          "Staff: assign caster and/or ref to a match."),
             ("/match-history",       "View official match results by type."),
             ("/admin-submit-scores", "Admin: override match scores."),
             ("/getschedules",        "View all upcoming match schedules."),
@@ -1099,3 +1087,232 @@ async def prompt_confirmation(interaction: discord.Interaction, message: str) ->
     await interaction.response.send_message(message, view=view, ephemeral=True)
     await view.wait()
     return bool(view.value)
+
+
+# =============================================================================
+#  EDIT MATCH VIEW  (staff assign caster / ref)
+# =============================================================================
+
+class EditMatchSelect(discord.ui.Select):
+    """Dropdown to pick which open match to edit."""
+
+    def __init__(self, matches: list, bot: "LeagueBot", guild: discord.Guild) -> None:
+        self._matches = {m.id: m for m in matches}
+        self._bot = bot
+        self._guild = guild
+        options = [
+            discord.SelectOption(
+                label=f"{m.team_one} vs {m.team_two}",
+                description=f"Week {m.week} · {m.match_type.capitalize()} · Due {m.due_at[:10]}",
+                value=m.id,
+            )
+            for m in matches[:25]
+        ]
+        super().__init__(placeholder="Select a match…", options=options, min_values=1, max_values=1)
+
+    async def callback(self, interaction: discord.Interaction) -> None:
+        match = self._matches.get(self.values[0])
+        if not match:
+            await interaction.response.send_message("Match not found.", ephemeral=True)
+            return
+        embed = discord.Embed(
+            title=f"{match.team_one} vs {match.team_two}",
+            description="What would you like to edit for this match?",
+            color=discord.Color.blurple(),
+        )
+        embed.add_field(name="Week", value=str(match.week), inline=True)
+        embed.add_field(name="Type", value=match.match_type.capitalize(), inline=True)
+        embed.add_field(name="Due", value=match.due_at[:10], inline=True)
+        if match.scheduled_time:
+            embed.add_field(name="Scheduled Time", value=match.scheduled_time, inline=False)
+
+        action_view = EditMatchActionView(bot=self._bot, match=match, guild=self._guild)
+        await interaction.response.edit_message(embed=embed, view=action_view)
+
+
+class EditMatchView(discord.ui.View):
+    """Initial view — just the match picker dropdown."""
+
+    def __init__(self, *, bot: "LeagueBot", matches: list, guild: discord.Guild) -> None:
+        super().__init__(timeout=120)
+        self.add_item(EditMatchSelect(matches=matches, bot=bot, guild=guild))
+
+
+class EditMatchActionView(discord.ui.View):
+    """Shown after selecting a match — buttons for what to assign."""
+
+    def __init__(self, *, bot: "LeagueBot", match, guild: discord.Guild) -> None:
+        super().__init__(timeout=120)
+        self._bot = bot
+        self._match = match
+        self._guild = guild
+
+    @discord.ui.button(label="Assign Caster", style=discord.ButtonStyle.primary, emoji="🎙️")
+    async def assign_caster(self, interaction: discord.Interaction, _: discord.ui.Button) -> None:
+        await self._show_role_picker(interaction, role_type="caster")
+
+    @discord.ui.button(label="Assign Ref", style=discord.ButtonStyle.primary, emoji="🧑‍⚖️")
+    async def assign_ref(self, interaction: discord.Interaction, _: discord.ui.Button) -> None:
+        await self._show_role_picker(interaction, role_type="ref")
+
+    @discord.ui.button(label="Assign Both", style=discord.ButtonStyle.success, emoji="✅")
+    async def assign_both(self, interaction: discord.Interaction, _: discord.ui.Button) -> None:
+        await self._show_role_picker(interaction, role_type="both")
+
+    async def _show_role_picker(self, interaction: discord.Interaction, role_type: str) -> None:
+        view = AssignStaffView(
+            bot=self._bot,
+            match=self._match,
+            guild=self._guild,
+            role_type=role_type,
+        )
+        embed = discord.Embed(
+            title=f"Assign {'Caster & Ref' if role_type == 'both' else role_type.capitalize()}",
+            description=(
+                f"**Match:** {self._match.team_one} vs {self._match.team_two}\n\n"
+                "Use the member selector(s) below to choose the staff member(s)."
+            ),
+            color=discord.Color.green(),
+        )
+        await interaction.response.edit_message(embed=embed, view=view)
+
+
+class _StaffMemberSelect(discord.ui.UserSelect):
+    """A UserSelect for picking a caster or ref."""
+
+    def __init__(self, *, placeholder: str, row: int) -> None:
+        super().__init__(placeholder=placeholder, min_values=1, max_values=1, row=row)
+        self.chosen: Optional[discord.Member] = None
+
+    async def callback(self, interaction: discord.Interaction) -> None:
+        selected = self.values[0]
+        guild = interaction.guild
+        member = None
+        if isinstance(selected, discord.Member):
+            member = selected
+        else:
+            uid = getattr(selected, "id", None)
+            if uid:
+                member = guild.get_member(uid)
+                if not member:
+                    try:
+                        member = await guild.fetch_member(uid)
+                    except discord.HTTPException:
+                        pass
+        self.chosen = member
+        await interaction.response.defer()
+
+
+class AssignStaffView(discord.ui.View):
+    """View with one or two UserSelects + a Confirm button."""
+
+    def __init__(self, *, bot: "LeagueBot", match, guild: discord.Guild, role_type: str) -> None:
+        super().__init__(timeout=180)
+        self._bot = bot
+        self._match = match
+        self._guild = guild
+        self._role_type = role_type  # "caster" | "ref" | "both"
+
+        self._caster_select: Optional[_StaffMemberSelect] = None
+        self._ref_select: Optional[_StaffMemberSelect] = None
+
+        if role_type in ("caster", "both"):
+            self._caster_select = _StaffMemberSelect(placeholder="Select Caster…", row=0)
+            self.add_item(self._caster_select)
+
+        if role_type in ("ref", "both"):
+            self._ref_select = _StaffMemberSelect(placeholder="Select Referee…", row=1 if role_type == "both" else 0)
+            self.add_item(self._ref_select)
+
+        confirm_btn = discord.ui.Button(
+            label="Confirm Assignment",
+            style=discord.ButtonStyle.success,
+            emoji="✔️",
+            row=2,
+        )
+        confirm_btn.callback = self._on_confirm
+        self.add_item(confirm_btn)
+
+    async def _on_confirm(self, interaction: discord.Interaction) -> None:
+        caster: Optional[discord.Member] = self._caster_select.chosen if self._caster_select else None
+        ref: Optional[discord.Member] = self._ref_select.chosen if self._ref_select else None
+
+        if self._role_type == "caster" and not caster:
+            await interaction.response.send_message("Please select a caster first.", ephemeral=True)
+            return
+        if self._role_type == "ref" and not ref:
+            await interaction.response.send_message("Please select a referee first.", ephemeral=True)
+            return
+        if self._role_type == "both" and (not caster or not ref):
+            await interaction.response.send_message("Please select both a caster and a referee.", ephemeral=True)
+            return
+
+        match = self._match
+        guild = self._guild
+
+        # Post to the match channel
+        match_channel = guild.get_channel(match.channel_id)
+        if isinstance(match_channel, discord.TextChannel):
+            lines = [f"**Staff Assignment — {match.team_one} vs {match.team_two}**"]
+            if caster:
+                lines.append(f"🎙️ **Caster:** {caster.mention}")
+            if ref:
+                lines.append(f"🧑‍⚖️ **Referee:** {ref.mention}")
+            try:
+                await match_channel.send("\n".join(lines))
+                for member in filter(None, [caster, ref]):
+                    try:
+                        await match_channel.set_permissions(
+                            member, view_channel=True, send_messages=True
+                        )
+                    except discord.HTTPException:
+                        pass
+            except discord.HTTPException:
+                pass
+
+        # Post to assignments channel
+        assignments_channel_id = self._bot.config.match_assignments_channel_id
+        if assignments_channel_id:
+            assignments_channel = guild.get_channel(assignments_channel_id)
+            if isinstance(assignments_channel, discord.TextChannel):
+                embed = discord.Embed(
+                    title="Match Staff Assignment",
+                    color=discord.Color.green(),
+                )
+                embed.add_field(
+                    name="Match",
+                    value=f"{match.team_one} vs {match.team_two} (Week {match.week})",
+                    inline=False,
+                )
+                if match.scheduled_time:
+                    embed.add_field(name="Scheduled Time", value=match.scheduled_time, inline=False)
+                if caster:
+                    embed.add_field(name="🎙️ Caster", value=caster.mention, inline=True)
+                if ref:
+                    embed.add_field(name="🧑‍⚖️ Referee", value=ref.mention, inline=True)
+                embed.set_footer(text=f"Assigned by {interaction.user}")
+                try:
+                    await assignments_channel.send(embed=embed)
+                except discord.HTTPException:
+                    pass
+
+        # Show confirmation back to staff
+        summary_embed = discord.Embed(
+            title="✅ Assignment Confirmed",
+            color=discord.Color.green(),
+        )
+        summary_embed.add_field(
+            name="Match",
+            value=f"{match.team_one} vs {match.team_two}",
+            inline=False,
+        )
+        if caster:
+            summary_embed.add_field(name="🎙️ Caster", value=caster.mention, inline=True)
+        if ref:
+            summary_embed.add_field(name="🧑‍⚖️ Referee", value=ref.mention, inline=True)
+        summary_embed.set_footer(text="Posted to match channel and assignments channel.")
+
+        for item in self.children:
+            item.disabled = True
+        await interaction.response.edit_message(embed=summary_embed, view=self)
+        self.stop()
