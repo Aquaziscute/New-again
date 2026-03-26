@@ -28,6 +28,7 @@ from .views import (
     AssignmentClaimView,
     ConfirmTimeView,
     ConfirmView,
+    EditMatchView,
     HelpView,
     ManageTeamView,
     RosterLookupView,
@@ -46,9 +47,6 @@ from .views import (
 
 log = logging.getLogger(__name__)
 logging.basicConfig(level=logging.INFO)
-
-
-
 
 
 # =============================================================================
@@ -400,15 +398,12 @@ class LeagueBot(commands.Bot):
 
 # =============================================================================
 #  PAGINATED RULE PICKER
-#  Discord limits Select menus to 25 options, so we page through all rules.
 # =============================================================================
 
 PAGE_SIZE = 25
 
 
 class RuleSelect(discord.ui.Select):
-    """Dropdown of up to 25 rule options for the current page."""
-
     def __init__(self, rules_page: list[dict], target_member: discord.Member, bot: "LeagueBot") -> None:
         self._rules_page = rules_page
         self._target = target_member
@@ -440,8 +435,6 @@ class RuleSelect(discord.ui.Select):
 
 
 class RulePickerView(discord.ui.View):
-    """Paginated view — 25 rules per page with Prev/Next buttons."""
-
     def __init__(self, *, all_rules: list[dict], target_member: discord.Member, bot: "LeagueBot", page: int = 0) -> None:
         super().__init__(timeout=120)
         self._all = all_rules
@@ -1416,6 +1409,43 @@ class LeagueCommands(commands.Cog):
         await self._send(interaction, embed=embed)
 
     # -------------------------------------------------------------------------
+    #  EDIT MATCH COMMAND
+    # -------------------------------------------------------------------------
+
+    @app_commands.command(name="edit-match", description="Staff: assign caster and/or ref to a match")
+    @app_commands.describe(teams="Part of the team names to search for (e.g. 'Test')")
+    async def edit_match(self, interaction: discord.Interaction, teams: Optional[str] = None) -> None:
+        if not self.bot.is_staff(interaction):
+            await self._send(interaction, "Staff only.")
+            return
+
+        open_matches = list(self.bot.match_manager.open_matches())
+        if not open_matches:
+            await self._send(interaction, "No open matches right now.")
+            return
+
+        if teams:
+            query = teams.lower()
+            filtered = [
+                m for m in open_matches
+                if query in m.team_one.lower() or query in m.team_two.lower()
+            ]
+        else:
+            filtered = open_matches
+
+        if not filtered:
+            await self._send(interaction, "No matches found matching that search.")
+            return
+
+        view = EditMatchView(bot=self.bot, matches=filtered, guild=interaction.guild)
+        embed = discord.Embed(
+            title="Edit Match",
+            description="Select a match from the dropdown below.",
+            color=discord.Color.blurple(),
+        )
+        await self._send(interaction, embed=embed, view=view)
+
+    # -------------------------------------------------------------------------
     #  AI COMMANDS
     # -------------------------------------------------------------------------
 
@@ -1546,7 +1576,7 @@ class LeagueCommands(commands.Cog):
 
 
 # =============================================================================
-#  PUNISHMENT MODAL  (now accepts pre-filled values)
+#  PUNISHMENT MODAL
 # =============================================================================
 
 class PunishModal(discord.ui.Modal, title="Confirm Punishment"):
@@ -1569,7 +1599,6 @@ class PunishModal(discord.ui.Modal, title="Confirm Punishment"):
         self.action = action
         self.member = member
         self.bot = bot
-        # Pre-fill the fields with the selected rule's values
         if prefill_reason:
             self.reason.default = prefill_reason
         if prefill_duration:
